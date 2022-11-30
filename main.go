@@ -8,6 +8,7 @@ import (
 
 	videointelligence "cloud.google.com/go/videointelligence/apiv1p3beta1"
 	videointelligencepb "cloud.google.com/go/videointelligence/apiv1p3beta1/videointelligencepb"
+	"github.com/gogo/protobuf/jsonpb"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/api/option"
 )
@@ -123,8 +124,11 @@ func main() {
 			log.Fatal("An error occured : ", err)
 		}
 
+		m := jsonpb.Marshaler{}
+		results, _ := m.MarshalToString(resp)
+
 		if len(*exportPath) != 0 {
-			_, err = exportFile.WriteString(resp.GetAnnotationResults().String())
+			_, err = exportFile.WriteString(results)
 
 			if err != nil {
 				log.Fatal("An error occured while exporting : ", err)
@@ -132,7 +136,7 @@ func main() {
 		}
 
 		if *enableStdout {
-			println(resp.String())
+			println(results)
 		}
 	}
 }

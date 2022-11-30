@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	cloud.google.com/go/videointelligence v1.9.0
+	github.com/gogo/protobuf v1.3.2
 	github.com/sirupsen/logrus v1.9.0
 	google.golang.org/api v0.103.0
 )
