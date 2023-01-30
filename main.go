@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"io"
 	"os"
 
@@ -136,7 +137,7 @@ func main() {
 		}
 
 		if *enableStdout {
-			println(results)
+			fmt.Println(results)
 		}
 	}
 }
