@@ -16,7 +16,7 @@ Cloud Video Intelligence API Streaming is a simple and efficient tool for stream
 ## Features
 
 - ✅ A **single** statically compiled **binary** for each OS/architecture
-- ✅ Can **retrieve the data** to be streamed **directly via a pipe **
+- ✅ Can **retrieve the data** to be streamed **directly via a pipe**
 - ✅ Can **retrieve the data** to be streamed **from a file**
 - ✅ Can **save annotations** in a **Cloud Storage bucket**
 - ✅ Can **save annotations** in **real-time** to a **local file**
