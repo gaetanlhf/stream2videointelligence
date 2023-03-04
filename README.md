@@ -1,11 +1,12 @@
 
-<h2 align="center">Cloud Video Intelligence API Streaming</h2>
-<p align="center">A simple and efficient tool for streaming to the Google Cloud Platform Video Intelligence API</p>
+<h2 align="center">stream2videointelligence</h2>
+<p align="center">A simple and effective tool to access the Google Cloud Platform's Video Intelligence API and get near real-time insights</p>
 <p align="center">
     <a href="#about">About</a> •
     <a href="#features">Features</a> •
     <a href="#build">Build</a> •
     <a href="#configuration">Configuration</a> •
+    <a href="#usage">Usage</a> •
     <a href="#license">License</a>
 </p>
 
@@ -45,7 +46,20 @@ This program has a number of options, as follows:
 **Note**:
 - You must choose to enable at least one option between `-gcs`, `-stdout` or `-export`
 - If `-source` is not set, the data must be piped from another program
-- The different features supported by the Cloud Video Intelligence API in streaming mode are `STREAMING_OBJECT_TRACKING`, `STREAMING_LABEL_DETECTION`, `STREAMING_EXPLICIT_CONTENT_DETECTION`, `STREAMING_SHOT_CHANGE_DETECTION`, `STREAMING_AUTOML_OBJECT_TRACKING`, `STREAMING_AUTOML_CLASSIFICATION`, `STREAMING_AUTOML_ACTION_RECOGNITION`
+- The different features supported by the Cloud Video Intelligence API in streaming mode are `STREAMING_OBJECT_TRACKING`, `STREAMING_LABEL_DETECTION`, `STREAMING_EXPLICIT_CONTENT_DETECTION`, `STREAMING_SHOT_CHANGE_DETECTION`
+
+## Usage
+
+Example of use with a pipe:
+
+```
+gst-launch-1.0 -q -v v4l2src device=/dev/video0 ! video/x-raw,framerate=30/1,width=640,height=480 ! videoconvert ! videoscale ! videorate ! x264enc tune=zerolatency speed-preset=6 ! flvmux ! queue ! fdsink | ./stream2videointelligence -creds ./credientials.json -feature STREAMING_OBJECT_TRACKING -stdout
+```
+
+Example of use with a video file:
+```
+./stream2videointelligence -creds ./credentials.json -source video.flv -feature STREAMING_OBJECT_TRACKING -stdout
+```
 
 ## License
 
