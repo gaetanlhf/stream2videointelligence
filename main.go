@@ -26,14 +26,6 @@ var (
 	exportPath                             *string
 	n                                      int
 	err                                    error
-	ctx                                    context.Context
-	client                                 *videointelligence.StreamingVideoIntelligenceClient
-	stream                                 videointelligencepb.StreamingVideoIntelligenceService_StreamingAnnotateVideoClient
-	streamConfig                           videointelligencepb.StreamingAnnotateVideoRequest
-	data                                   []byte
-	streamData                             videointelligencepb.StreamingAnnotateVideoRequest
-	resp                                   *videointelligencepb.StreamingAnnotateVideoResponse
-	serviceAccountCredentialsFile          *os.File
 	videoFile                              *os.File
 	exportFile                             *os.File
 )
@@ -56,7 +48,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	serviceAccountCredentialsFile, err = os.OpenFile(*serviceAccountCredentialsPath, os.O_RDONLY, 0600)
+	serviceAccountCredentialsFile, err := os.OpenFile(*serviceAccountCredentialsPath, os.O_RDONLY, 0600)
 
 	if os.IsNotExist(err) {
 		log.Fatalf("Error while opening your service account JSON key file : file '%s' does not exist", *serviceAccountCredentialsPath)
@@ -81,7 +73,7 @@ func main() {
 	}
 
 	if len(*exportPath) != 0 {
-		exportFile, err = os.OpenFile(*exportPath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+		exportFile, err := os.OpenFile(*exportPath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 
 		if os.IsNotExist(err) {
 			log.Fatalf("File '%s' does not exist", *exportPath)
@@ -114,12 +106,12 @@ func main() {
 
 	log.Info("Starting Cloud Video Intelligence API Streaming " + version + "build on " + buildTime)
 
-	stream = initStreaming(*serviceAccountCredentialsPath)
+	stream := initStreaming(*serviceAccountCredentialsPath)
 	sendConfiguration(stream, *CloudVideoIntelligenceStreamingFeature, *GoogleCloudStoragePath, isGoogleCloudStorageEnabled)
 	streamVideoToGCP(stream, *videoPath)
 
 	for {
-		resp, err = stream.Recv()
+		resp, err := stream.Recv()
 
 		if err != nil {
 			log.Fatal("An error occured : ", err)
@@ -143,11 +135,11 @@ func main() {
 }
 
 func initStreaming(sa string) videointelligencepb.StreamingVideoIntelligenceService_StreamingAnnotateVideoClient {
-	ctx = context.Background()
+	ctx := context.Background()
 
 	log.Info("Connecting to Video Intelligence API...")
 
-	client, err = videointelligence.NewStreamingVideoIntelligenceClient(ctx, option.WithCredentialsFile(sa))
+	client, err := videointelligence.NewStreamingVideoIntelligenceClient(ctx, option.WithCredentialsFile(sa))
 
 	if err != nil {
 		log.Fatal(err)
@@ -155,7 +147,7 @@ func initStreaming(sa string) videointelligencepb.StreamingVideoIntelligenceServ
 
 	log.Info("Successfully connected!")
 
-	stream, err = client.StreamingAnnotateVideo(ctx)
+	stream, err := client.StreamingAnnotateVideo(ctx)
 
 	if err != nil {
 		log.Fatal(err)
@@ -167,7 +159,7 @@ func initStreaming(sa string) videointelligencepb.StreamingVideoIntelligenceServ
 func sendConfiguration(stream videointelligencepb.StreamingVideoIntelligenceService_StreamingAnnotateVideoClient, feature string, gcs string, gcsEnabled bool) {
 	log.Info("Sending configuration...")
 
-	streamConfig = videointelligencepb.StreamingAnnotateVideoRequest{
+	streamConfig := videointelligencepb.StreamingAnnotateVideoRequest{
 		StreamingRequest: &videointelligencepb.StreamingAnnotateVideoRequest_VideoConfig{
 			VideoConfig: &videointelligencepb.StreamingVideoConfig{
 				StreamingConfig: nil,
@@ -186,7 +178,7 @@ func sendConfiguration(stream videointelligencepb.StreamingVideoIntelligenceServ
 }
 
 func streamVideoToGCP(stream videointelligencepb.StreamingVideoIntelligenceService_StreamingAnnotateVideoClient, videoPath string) {
-	data = make([]byte, 0, 1*1024*1024)
+	data := make([]byte, 0, 1*1024*1024)
 
 	log.Info("Sending data...")
 
@@ -212,9 +204,9 @@ func streamVideoToGCP(stream videointelligencepb.StreamingVideoIntelligenceServi
 				log.Fatal(err)
 			}
 
-			data = data[:n]
+			data := data[:n]
 
-			streamData = videointelligencepb.StreamingAnnotateVideoRequest{
+			streamData := videointelligencepb.StreamingAnnotateVideoRequest{
 				StreamingRequest: &videointelligencepb.StreamingAnnotateVideoRequest_InputContent{
 					InputContent: data,
 				},
