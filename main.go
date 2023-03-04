@@ -104,7 +104,7 @@ func main() {
 		log.Info("Data will be exported to : ", *GoogleCloudStoragePath)
 	}
 
-	log.Info("Starting Cloud Video Intelligence API Streaming " + version + "build on " + buildTime)
+	log.Info("Starting Cloud Video Intelligence API Streaming " + version + " build on " + buildTime)
 
 	stream := initStreaming(*serviceAccountCredentialsPath)
 	sendConfiguration(stream, *CloudVideoIntelligenceStreamingFeature, *GoogleCloudStoragePath, isGoogleCloudStorageEnabled)
