@@ -1,6 +1,6 @@
 build:
 	go mod download
-	CGO_ENABLED=0 go build -ldflags "-X main.version=`git describe --tags` -X main.buildTime=`date +%FT%T%z`" -o cloud-video-intelligence-api-streaming
+	CGO_ENABLED=0 go build -ldflags "-X main.version=`git describe --tags` -X main.buildTime=`date +%FT%T%z`" -o stream2videointelligence
 
 default: build
 
@@ -11,9 +11,9 @@ upgrade:
 	go mod verify
 
 run:
-	./cloud-video-intelligence-api-streaming
+	./stream2videointelligence
 
 clean:
 	go clean
 	go mod tidy
-	rm -f cloud-video-intelligence-api-streaming
+	rm -f stream2videointelligence
